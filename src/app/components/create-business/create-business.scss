@@ -1,0 +1,26 @@
+@import '../login/login.scss';
+
+.auth-container.wide {
+    max-width: 600px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+
+    .form-grid,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}

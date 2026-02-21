@@ -1,0 +1,82 @@
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo-area">
+                <div class="logo-icon small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <h1 class="brand-name">Invoice<span>Builder</span></h1>
+            </div>
+            <h2>Upload PDF Template</h2>
+            <p>Upload the invoice template for <strong>{{ businessName }}</strong></p>
+        </div>
+
+        <div class="card auth-card">
+            <div *ngIf="errorMessage" class="error-banner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                {{ errorMessage }}
+            </div>
+
+            <div *ngIf="successMessage" class="success-banner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                {{ successMessage }}
+            </div>
+
+            <div class="upload-zone" [class.has-file]="selectedFile">
+                <input type="file" id="templateFile" (change)="onFileSelected($event)" accept="application/pdf" hidden
+                    #fileInput>
+
+                <div class="upload-content" (click)="fileInput.click()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="upload-icon">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p *ngIf="!selectedFile">Select your PDF or Image template</p>
+                    <p *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</p>
+                    <span class="file-info" *ngIf="!selectedFile">Formats: PDF, JPG, PNG</span>
+                </div>
+            </div>
+
+            <div class="form-actions" style="margin-top: 2rem;">
+                <button class="btn btn-primary full-width" [disabled]="!selectedFile || isUploading"
+                    (click)='onUpload()'>
+                    {{ isUploading ? 'Uploading...' : 'Confirm & Save Template' }}
+                </button>
+            </div>
+        </div>
+
+        <div class="tip-card card"
+            style="margin-top: 2rem; background: #eff6ff; border-left-color: var(--primary-color);">
+            <div class="d-flex align-items-center" style="gap: 12px; color: var(--primary-color);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <strong>Requirement</strong>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 8px;">
+                Make sure your PDF has form fields (widgets) that match our system's expected names for data merging.
+            </p>
+        </div>
+    </div>
+</div>

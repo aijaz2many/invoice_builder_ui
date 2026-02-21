@@ -1,0 +1,69 @@
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="logo-area">
+                <div class="logo-icon small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                </div>
+                <h1 class="brand-name">Invoice<span>Builder</span></h1>
+            </div>
+            <h2>Welcome Back</h2>
+            <p>Log in to your account to continue</p>
+        </div>
+
+        <div class="card auth-card">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div *ngIf="errorMessage" class="error-banner">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    {{ errorMessage }}
+                </div>
+
+                <div class="form-group">
+                    <label for="emailId">Email Address</label>
+                    <input type="email" id="emailId" formControlName="emailId" placeholder="name@company.com"
+                        [class.error]="loginForm.get('emailId')?.touched && loginForm.get('emailId')?.invalid">
+                    <div class="field-error"
+                        *ngIf="loginForm.get('emailId')?.touched && loginForm.get('emailId')?.hasError('required')">
+                        Email is required
+                    </div>
+                    <div class="field-error"
+                        *ngIf="loginForm.get('emailId')?.touched && loginForm.get('emailId')?.hasError('email')">
+                        Enter a valid email
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label for="password">Password</label>
+                        <a routerLink="/forgot-password" class="forgot-link">Forgot?</a>
+                    </div>
+                    <input type="password" id="password" formControlName="password" placeholder="••••••••"
+                        [class.error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                    <div class="field-error"
+                        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
+                        Password is required
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width" [disabled]="isLoading">
+                    {{ isLoading ? 'Signing in...' : 'Sign In' }}
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a routerLink="/signup">Sign up for free</a>
+            </div>
+        </div>
+    </div>
+</div>
