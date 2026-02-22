@@ -1,0 +1,52 @@
+<div class="pricing-container">
+  <nav class="navbar">
+    <div class="logo">Invoice Builder</div>
+    <div class="auth-buttons">
+      <a routerLink="/login" class="btn-login">Log In</a>
+      <a routerLink="/signup" class="btn-signup">Sign Up</a>
+    </div>
+  </nav>
+
+  <main class="pricing-content">
+    <div class="header">
+      <h1>Simple, transparent pricing</h1>
+      <p>Choose the plan that's right for your business. No hidden fees.</p>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading plans...</p>
+    </div>
+
+    <div class="error" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+
+    <div class="pricing-grid" *ngIf="!loading && !error">
+      <div class="pricing-card" *ngFor="let plan of plans; let i = index"
+        [class.popular]="plan.subscriptionPlanName?.toLowerCase()?.includes('standard')">
+        <div class="popular-badge" *ngIf="plan.subscriptionPlanName?.toLowerCase()?.includes('standard')">Most Popular
+        </div>
+        <div class="card-header">
+          <h3>{{ plan.subscriptionPlanName }}</h3>
+          <p class="description">{{ plan.subscriptionPlanDescription }}</p>
+        </div>
+
+        <div class="price">
+          <span class="currency">$</span>
+          <span class="amount">{{ plan.subscriptionPlanPrice }}</span>
+          <span class="duration">/ {{ plan.subscriptionPlanDuration }} days</span>
+        </div>
+
+        <ul class="features">
+          <li><i class="fas fa-check"></i> Unlimited Invoices</li>
+          <li><i class="fas fa-check"></i> Custom Templates</li>
+          <li><i class="fas fa-check"></i> PDF Exports</li>
+          <li><i class="fas fa-check"></i> 24/7 Support</li>
+        </ul>
+
+        <a routerLink="/signup" class="btn-select">Get Started</a>
+      </div>
+    </div>
+  </main>
+</div>

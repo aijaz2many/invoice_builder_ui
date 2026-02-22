@@ -1,0 +1,431 @@
+// ─── Page Container ────────────────────────────────────────────────────────────
+.admin-subs-container {
+    min-height: calc(100vh - 72px);
+    background-color: #f0f4f8;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.page-header h2 {
+    font-size: 1.55rem;
+    color: #1e293b;
+}
+
+// ─── Form Card ─────────────────────────────────────────────────────────────────
+.form-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+
+.form-card-header {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #fff;
+    padding: 0.85rem 1.5rem;
+
+    h5 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+    }
+
+    .btn-light-cancel {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        font-size: 0.8rem;
+        border-radius: 0.4rem;
+        padding: 0.28rem 0.75rem;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    }
+}
+
+.form-card-body {
+    padding: 1rem 1.5rem 1.25rem;
+}
+
+// ─── Inline Form Row ───────────────────────────────────────────────────────────
+.inline-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.inline-form-field {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 160px;
+    min-width: 140px;
+
+    &.inline-form-toggles {
+        flex: 0 1 auto;
+        min-width: 165px;
+    }
+
+    &.inline-form-action {
+        flex: 0 0 auto;
+        min-width: 105px;
+    }
+}
+
+.field-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+}
+
+.field-input-wrap {
+    position: relative;
+
+    .fi-icon {
+        position: absolute;
+        left: 0.65rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 0.78rem;
+        z-index: 5;
+        pointer-events: none;
+    }
+
+    .fi-control {
+        width: 100%;
+        padding: 0.52rem 0.75rem 0.52rem 2rem;
+        font-size: 0.865rem;
+        color: #334155;
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.45rem;
+        transition: border-color 0.18s, box-shadow 0.18s, background-color 0.18s;
+        appearance: none;
+        -webkit-appearance: none;
+
+        &:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+    }
+
+    select.fi-control {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.65rem center;
+        background-size: 11px 9px;
+        padding-right: 1.8rem;
+    }
+}
+
+.field-error {
+    font-size: 0.7rem;
+    color: #ef4444;
+    margin-top: 0.2rem;
+}
+
+// ─── Toggles ───────────────────────────────────────────────────────────────────
+.toggles-wrap {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.45rem;
+    border: 1px solid #e2e8f0;
+    height: 36px;
+}
+
+.custom-switch {
+    .form-check-input {
+        width: 2.1em;
+        height: 1.05em;
+        cursor: pointer;
+
+        &:checked {
+            background-color: #10b981;
+            border-color: #10b981;
+        }
+    }
+
+    .form-check-label {
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #475569;
+    }
+}
+
+// ─── Submit Button ─────────────────────────────────────────────────────────────
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    width: 100%;
+    height: 36px;
+    padding: 0 1rem;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.45rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    }
+
+    &:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+}
+
+// ─── Grid Card ─────────────────────────────────────────────────────────────────
+.grid-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+
+.grid-card-header {
+    padding: 0.9rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+
+    h5 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin: 0;
+    }
+}
+
+.badge-count {
+    display: inline-flex;
+    align-items: center;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.18rem 0.65rem;
+    border-radius: 2rem;
+    border: 1px solid #e2e8f0;
+}
+
+// ─── AG Grid Wrapper ───────────────────────────────────────────────────────────
+.ag-grid-wrapper {
+    width: 100%;
+    height: 520px;
+    padding: 0;
+}
+
+// ─── AG Grid Cell Renderers (global because they are injected as raw HTML) ─────
+:host ::ng-deep {
+
+    // ID badge in grid
+    .ag-id-badge {
+        display: inline-block;
+        background: #e2e8f0;
+        color: #475569;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.12rem 0.5rem;
+        border-radius: 0.3rem;
+    }
+
+    // Business cell
+    .ag-cell-main {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.84rem;
+        line-height: 1.2;
+    }
+
+    .ag-cell-sub {
+        font-size: 0.72rem;
+        color: #94a3b8;
+        line-height: 1.2;
+    }
+
+    // Plan badge
+    .ag-plan-badge {
+        display: inline-block;
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.15rem 0.55rem;
+        border-radius: 0.35rem;
+        white-space: nowrap;
+    }
+
+    // Date cells
+    .ag-date-start {
+        color: #059669;
+        font-size: 0.8rem;
+        font-weight: 500;
+        white-space: nowrap;
+
+        i {
+            margin-right: 3px;
+        }
+    }
+
+    .ag-date-end {
+        color: #dc2626;
+        font-size: 0.8rem;
+        font-weight: 500;
+        white-space: nowrap;
+
+        i {
+            margin-right: 3px;
+        }
+    }
+
+    // Status badges
+    .ag-status-badge {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 0.18rem 0.6rem;
+        border-radius: 2rem;
+
+        &.status-active {
+            background: #dcfce7;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        &.status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        &.status-renew {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        &.status-no-renew {
+            background: #f8fafc;
+            color: #94a3b8;
+            border: 1px solid #e2e8f0;
+        }
+    }
+
+    // Action buttons in grid
+    .ag-action-btns {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        height: 100%;
+    }
+
+    .ag-action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.74rem;
+        font-weight: 600;
+        border-radius: 0.35rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        white-space: nowrap;
+
+        i {
+            font-size: 0.72rem;
+        }
+
+        &.ag-edit-btn {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+
+            &:hover {
+                background: #2563eb;
+                color: #fff;
+                border-color: #2563eb;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+            }
+        }
+
+        &.ag-delete-btn {
+            background: #fff1f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+
+            &:hover {
+                background: #dc2626;
+                color: #fff;
+                border-color: #dc2626;
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(220, 38, 38, 0.25);
+            }
+        }
+    }
+}
+
+// ─── Empty State ───────────────────────────────────────────────────────────────
+.empty-state {
+    i {
+        color: #cbd5e1;
+    }
+
+    p {
+        color: #94a3b8;
+        font-size: 0.95rem;
+    }
+}
+
+// ─── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 992px) {
+    .inline-form-field {
+        flex: 1 1 calc(50% - 0.75rem);
+    }
+
+    .inline-form-field.inline-form-action {
+        flex: 1 1 100%;
+
+        .btn-submit {
+            max-width: 200px;
+        }
+    }
+
+    .ag-grid-wrapper {
+        height: 440px;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-card-body {
+        padding: 0.85rem 1rem;
+    }
+
+    .inline-form-field {
+        flex: 1 1 100%;
+    }
+
+    .ag-grid-wrapper {
+        height: 380px;
+    }
+}

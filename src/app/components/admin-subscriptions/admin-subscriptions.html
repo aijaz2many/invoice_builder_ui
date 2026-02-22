@@ -1,0 +1,164 @@
+<div class="admin-subs-container py-4">
+    <div class="container-fluid px-4">
+
+        <!-- Page Header -->
+        <div class="page-header mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">
+                    <i class="fas fa-id-card text-primary me-2"></i>Subscription Management
+                </h2>
+                <p class="text-muted mb-0">Manage business subscriptions, assign plans, and control validity.</p>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> {{ successMessage }}
+            <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i> {{ errorMessage }}
+            <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+
+        <!-- ── Assign / Edit Subscription Form Card ── -->
+        <div class="form-card mb-4">
+            <div class="form-card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas me-2" [ngClass]="isEditMode ? 'fa-pen' : 'fa-plus-circle'"></i>
+                    {{ isEditMode ? 'Edit Subscription' : 'Assign New Subscription' }}
+                </h5>
+                <button *ngIf="isEditMode" class="btn btn-sm btn-light-cancel" (click)="cancelEdit()">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </button>
+            </div>
+
+            <div class="form-card-body">
+                <form [formGroup]="subscriptionForm" (ngSubmit)="onSubmit()"
+                    *ngIf="!isLoading || businesses.length > 0">
+                    <div class="inline-form-row">
+
+                        <!-- Business -->
+                        <div class="inline-form-field">
+                            <label class="field-label">Business</label>
+                            <div class="field-input-wrap">
+                                <span class="fi-icon"><i class="fas fa-building"></i></span>
+                                <select class="fi-control" id="businessId" formControlName="businessId"
+                                    [attr.disabled]="isEditMode ? true : null">
+                                    <option value="" disabled selected>Select Business...</option>
+                                    <option *ngFor="let b of businesses" [value]="b.businessId">
+                                        {{ b.businessName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="subscriptionForm.get('businessId')?.invalid && subscriptionForm.get('businessId')?.touched"
+                                class="field-error">Required</div>
+                        </div>
+
+                        <!-- Plan -->
+                        <div class="inline-form-field">
+                            <label class="field-label">Plan</label>
+                            <div class="field-input-wrap">
+                                <span class="fi-icon"><i class="fas fa-tag"></i></span>
+                                <select class="fi-control" id="subscriptionPlanId" formControlName="subscriptionPlanId">
+                                    <option value="" disabled selected>Select Plan...</option>
+                                    <option *ngFor="let plan of subscriptionPlans" [value]="plan.subscriptionPlanId">
+                                        {{ plan.subscriptionPlanName }} - ${{ plan.subscriptionPlanPrice }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="subscriptionForm.get('subscriptionPlanId')?.invalid && subscriptionForm.get('subscriptionPlanId')?.touched"
+                                class="field-error">Required</div>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="inline-form-field">
+                            <label class="field-label">Start Date</label>
+                            <div class="field-input-wrap">
+                                <span class="fi-icon"><i class="fas fa-calendar-alt"></i></span>
+                                <input type="datetime-local" class="fi-control" id="startDate"
+                                    formControlName="subscriptionStartDate">
+                            </div>
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="inline-form-field">
+                            <label class="field-label">End Date</label>
+                            <div class="field-input-wrap">
+                                <span class="fi-icon"><i class="fas fa-calendar-check"></i></span>
+                                <input type="datetime-local" class="fi-control" id="endDate"
+                                    formControlName="subscriptionEndDate">
+                            </div>
+                        </div>
+
+                        <!-- Toggles -->
+                        <div class="inline-form-field inline-form-toggles">
+                            <label class="field-label">Options</label>
+                            <div class="toggles-wrap">
+                                <div class="form-check form-switch custom-switch">
+                                    <input class="form-check-input" type="checkbox" id="isActiveStatus"
+                                        formControlName="subscriptionStatus">
+                                    <label class="form-check-label" for="isActiveStatus">Active</label>
+                                </div>
+                                <div class="form-check form-switch custom-switch">
+                                    <input class="form-check-input" type="checkbox" id="isAutoRenew"
+                                        formControlName="autoRenew">
+                                    <label class="form-check-label" for="isAutoRenew">Auto Renew</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="inline-form-field inline-form-action">
+                            <label class="field-label">&nbsp;</label>
+                            <button type="submit" class="btn-submit" [disabled]="isLoading">
+                                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+                                <i *ngIf="!isLoading" class="fas me-1"
+                                    [ngClass]="isEditMode ? 'fa-save' : 'fa-plus'"></i>
+                                {{ isEditMode ? 'Update' : 'Assign' }}
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+
+                <div *ngIf="isLoading && businesses.length === 0" class="text-center py-3 text-muted">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 mb-0 small">Loading references...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── AG Grid Card ── -->
+        <div class="grid-card">
+            <div class="grid-card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-table text-primary me-2"></i>All Subscriptions
+                </h5>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="badge-count">
+                        {{ subscriptions.length }} record{{ subscriptions.length !== 1 ? 's' : '' }}
+                    </span>
+                    <div *ngIf="isListLoading" class="spinner-border spinner-border-sm text-primary" role="status">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <div *ngIf="!isListLoading && subscriptions.length === 0" class="empty-state py-5 text-center">
+                <i class="fas fa-box-open fa-3x mb-3"></i>
+                <p class="mb-0">No subscriptions found. Assign a new subscription above!</p>
+            </div>
+
+            <!-- AG Grid -->
+            <div class="ag-grid-wrapper" *ngIf="subscriptions.length > 0 || isListLoading">
+                <ag-grid-angular [theme]="gridTheme" [rowData]="subscriptions" [columnDefs]="colDefs"
+                    [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="10"
+                    [paginationPageSizeSelector]="[10, 20, 50]" [animateRows]="true" [rowHeight]="56"
+                    [headerHeight]="44" (gridReady)="onGridReady($event)" style="width: 100%; height: 100%;">
+                </ag-grid-angular>
+            </div>
+        </div>
+
+    </div>
+</div>

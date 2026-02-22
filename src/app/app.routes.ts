@@ -8,10 +8,15 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { CreateBusinessComponent } from './components/create-business/create-business';
 import { TemplateUploadComponent } from './components/template-upload/template-upload';
 import { AdminTemplateManagerComponent } from './components/admin-template-manager/admin-template-manager';
+import { AdminSubscriptionsComponent } from './components/admin-subscriptions/admin-subscriptions';
 import { DashboardComponent } from './components/dashboard/dashboard';
+import { PricingComponent } from './components/pricing/pricing';
+import { HomeComponent } from './components/home/home';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent },
+    { path: 'pricing', component: PricingComponent },
     { path: 'builder', component: InvoiceBuilderComponent },
     { path: 'invoices', component: InvoiceListComponent },
     { path: 'login', component: LoginComponent },
@@ -21,6 +26,7 @@ export const routes: Routes = [
     { path: 'create-business', component: CreateBusinessComponent },
     { path: 'upload-template/:id', component: TemplateUploadComponent },
     { path: 'admin/templates', component: AdminTemplateManagerComponent },
+    { path: 'admin/subscriptions', component: AdminSubscriptionsComponent },
     { path: 'admin/dashboard', component: DashboardComponent },
     { path: '**', redirectTo: 'login' }
 ];

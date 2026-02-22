@@ -58,6 +58,27 @@ export class ApiService {
         return this.http.post(`${this.apiUrl}/businesses/types/`, typeData);
     }
 
+    // Subscriptions
+    getSubscriptionPlans(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/subscriptions/plans`);
+    }
+
+    createSubscription(subscriptionData: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/subscriptions/`, subscriptionData);
+    }
+
+    getAllSubscriptions(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/subscriptions/`);
+    }
+
+    updateSubscription(subId: number, subData: any): Observable<any> {
+        return this.http.put(`${this.apiUrl}/subscriptions/${subId}`, subData);
+    }
+
+    deleteSubscription(subId: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/subscriptions/${subId}`);
+    }
+
     // Customers
     getCustomers(): Observable<Customer[]> {
         return this.http.get<Customer[]>(`${this.apiUrl}/customers/`);
@@ -136,5 +157,9 @@ export class ApiService {
 
     getAdminStats(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/admin/stats`);
+    }
+
+    getAdminBusinesses(): Observable<Business[]> {
+        return this.http.get<Business[]>(`${this.apiUrl}/admin/businesses`);
     }
 }
