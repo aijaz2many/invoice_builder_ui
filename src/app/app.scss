@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+ion-app,
+ion-page,
+.app-shell-content {
+  min-height: 100%;
+}
+
+.app-shell-header,
+.app-shell-footer {
+  --background: transparent;
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+}
+
+.app-shell-content {
+  --background: transparent;
+  background: var(--bg-color, #f8fafc);
+  display: flex;
+  flex-direction: column;
+}

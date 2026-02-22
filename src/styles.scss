@@ -95,11 +95,21 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     transition: all 0.2s;
-    
+    background-color: #ffffff;
+    color: var(--text-main);
+    caret-color: var(--primary-color);
+    -webkit-text-fill-color: var(--text-main);
+    color-scheme: light;
+
     &:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    &::placeholder {
+      color: var(--text-muted);
+      opacity: 1;
     }
   }
 }

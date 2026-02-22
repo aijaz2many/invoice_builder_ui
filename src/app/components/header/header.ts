@@ -12,6 +12,7 @@ import { ApiService } from '../../services/api.service';
 })
 export class Header {
   currentUser: any = null;
+  mobileMenuOpen = false;
 
   constructor(public apiService: ApiService, private router: Router) {
     this.apiService.currentUser$.subscribe(user => {
@@ -43,5 +44,13 @@ export class Header {
   logout(): void {
     this.apiService.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
   }
 }

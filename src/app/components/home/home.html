@@ -29,24 +29,93 @@
         </div>
 
         <div class="hero-image">
-            <div class="mockup-frame">
-                <div class="mockup-header">
-                    <div class="dots">
+            <div class="mockup-card">
+                <div class="mockup-browser">
+                    <div class="browser-controls">
                         <span></span><span></span><span></span>
                     </div>
+                    <div class="browser-tab">
+                        <div class="tab-dot"></div>
+                        <span>invoice-builder.com</span>
+                        <div class="tab-actions">
+                            <i class="fas fa-minus"></i>
+                            <i class="fas fa-expand"></i>
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="mockup-body">
-                    <div class="mockup-invoice">
-                        <div class="inv-header">
-                            <div class="inv-logo"></div>
-                            <div class="inv-title">INVOICE</div>
+
+                <div class="mockup-dashboard">
+                    <div class="dashboard-sidebar">
+                        <div class="sidebar-logo">
+                            <span>EB</span>
                         </div>
-                        <div class="inv-lines">
-                            <div class="line w-50"></div>
-                            <div class="line w-75"></div>
-                            <div class="line w-60"></div>
+                        <ul>
+                            <li class="active">
+                                <i class="fas fa-home"></i>
+                                Overview
+                            </li>
+                            <li>
+                                <i class="fas fa-file-invoice"></i>
+                                Invoices
+                            </li>
+                            <li>
+                                <i class="fas fa-users"></i>
+                                Clients
+                            </li>
+                            <li>
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="dashboard-main">
+                        <div class="summary-cards">
+                            <div class="summary-card">
+                                <span>Outstanding</span>
+                                <strong>$12,480</strong>
+                                <small>+12% vs last month</small>
+                            </div>
+                            <div class="summary-card">
+                                <span>Paid today</span>
+                                <strong>$3,250</strong>
+                                <small>2 invoices cleared</small>
+                            </div>
                         </div>
-                        <div class="inv-total"></div>
+
+                        <div class="invoice-preview">
+                            <div class="invoice-preview__header">
+                                <div>
+                                    <p class="invoice-label">Invoice #INV-2026</p>
+                                    <p class="invoice-date">Due Jan 05, 2026</p>
+                                </div>
+                                <button class="btn btn-soft">Download PDF</button>
+                            </div>
+
+                            <div class="invoice-preview__body">
+                                <div class="invoice-preview__details">
+                                    <div>
+                                        <span class="stat-label">Client</span>
+                                        <p>Brightside Studio</p>
+                                    </div>
+                                    <div>
+                                        <span class="stat-label">Amount</span>
+                                        <p>$1,280.00</p>
+                                    </div>
+                                    <div>
+                                        <span class="stat-label">Status</span>
+                                        <p class="badge badge-success">Pending</p>
+                                    </div>
+                                </div>
+                                <div class="invoice-preview__chart">
+                                    <div class="chart-bar">
+                                        <span style="width: 70%"></span>
+                                    </div>
+                                    <small>70% of monthly target</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
