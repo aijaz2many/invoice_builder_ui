@@ -24,6 +24,29 @@
   box-sizing: border-box;
 }
 
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+
+  @media (max-width: 640px) {
+    padding: 0 1rem;
+  }
+}
+
+.mobile-only {
+  @media (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+.desktop-only {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
@@ -32,7 +55,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
 }
@@ -54,7 +82,7 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   border: none;
   font-size: 0.875rem;
-  
+
   &:active {
     transform: scale(0.98);
   }
@@ -63,6 +91,7 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
+
   &:hover {
     background-color: var(--primary-hover);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
@@ -79,7 +108,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .form-group {
   margin-bottom: 1.25rem;
-  
+
   label {
     display: block;
     font-size: 0.875rem;
@@ -87,15 +116,17 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5rem;
     color: var(--text-main);
   }
-  
-  input, select, textarea {
+
+  input,
+  select,
+  textarea {
     width: 100%;
     padding: 0.625rem 0.875rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     transition: all 0.2s;
-    
+
     &:focus {
       outline: none;
       border-color: var(--primary-color);

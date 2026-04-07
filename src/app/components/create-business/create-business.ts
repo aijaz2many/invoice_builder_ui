@@ -109,14 +109,12 @@ export class CreateBusinessComponent implements OnInit {
       next: (result) => {
         this.apiService.getCurrentUser().subscribe({
           next: (user: any) => {
-            const isAdmin = user.roles && user.roles.some((r: any) =>
-              r.roleName && r.roleName.toLowerCase() === 'admin'
-            );
+            const isAdmin = this.apiService.checkIsAdmin(user);
             this.isLoading = false;
             if (isAdmin) {
               this.router.navigate(['/admin/templates']);
             } else {
-              this.router.navigate(['/upload-template', result.businessId]);
+              this.router.navigate(['/builder']);
             }
           },
           error: () => {

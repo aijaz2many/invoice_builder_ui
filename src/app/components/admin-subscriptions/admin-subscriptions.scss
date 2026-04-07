@@ -1,13 +1,27 @@
-// ─── Page Container ────────────────────────────────────────────────────────────
-.admin-subs-container {
+.admin-container {
+    padding: 2.5rem 0;
     min-height: calc(100vh - 72px);
-    background-color: #f0f4f8;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #f9fafb;
 }
 
-.page-header h2 {
-    font-size: 1.55rem;
-    color: #1e293b;
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+
+    h2 {
+        font-size: 2rem;
+        color: #111827;
+        margin-bottom: 0.25rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 0.9375rem;
+    }
 }
 
 // ─── Form Card ─────────────────────────────────────────────────────────────────

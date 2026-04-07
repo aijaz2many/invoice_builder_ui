@@ -13,12 +13,18 @@
                 </div>
                 <h1 class="brand-name">eInvoice<span>Builder</span></h1>
             </div>
+            @if (isAdmin) {
             <h2>Upload PDF Template</h2>
-            <p>Upload the invoice template for <strong>{{ businessName }}</strong></p>
+            <p>Upload the processed PDF invoice template for <strong>{{ businessName }}</strong></p>
+            } @else {
+            <h2>Upload Business Template</h2>
+            <p>Upload your business logo or a sample invoice image for <strong>{{ businessName }}</strong></p>
+            }
         </div>
 
         <div class="card auth-card">
-            <div *ngIf="errorMessage" class="error-banner">
+            @if (errorMessage) {
+            <div class="error-banner">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -27,8 +33,10 @@
                 </svg>
                 {{ errorMessage }}
             </div>
+            }
 
-            <div *ngIf="successMessage" class="success-banner">
+            @if (successMessage) {
+            <div class="success-banner">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -36,6 +44,7 @@
                 </svg>
                 {{ successMessage }}
             </div>
+            }
 
             <div class="upload-zone" [class.has-file]="selectedFile">
                 <input type="file" id="templateFile" (change)="onFileSelected($event)" accept="application/pdf" hidden
@@ -49,9 +58,14 @@
                         <polyline points="17 8 12 3 7 8"></polyline>
                         <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>
-                    <p *ngIf="!selectedFile">Select your PDF or Image template</p>
-                    <p *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</p>
-                    <span class="file-info" *ngIf="!selectedFile">Formats: PDF, JPG, PNG</span>
+                    @if (!selectedFile) {
+                    <p>{{ isAdmin ? 'Select Processed PDF Template' : 'Select your Logo or Image template' }}</p>
+                    } @else {
+                    <p class="file-name">{{ selectedFile.name }}</p>
+                    }
+                    @if (!selectedFile) {
+                    <span class="file-info">Formats: {{ isAdmin ? 'PDF' : 'JPG, PNG, PDF' }}</span>
+                    }
                 </div>
             </div>
 
@@ -63,6 +77,7 @@
             </div>
         </div>
 
+        @if (isAdmin) {
         <div class="tip-card card"
             style="margin-top: 2rem; background: #eff6ff; border-left-color: var(--primary-color);">
             <div class="d-flex align-items-center" style="gap: 12px; color: var(--primary-color);">
@@ -78,5 +93,6 @@
                 Make sure your PDF has form fields (widgets) that match our system's expected names for data merging.
             </p>
         </div>
+        }
     </div>
 </div>

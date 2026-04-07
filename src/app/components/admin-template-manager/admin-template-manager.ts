@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { Business } from '../../models/invoice.model';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -26,7 +26,10 @@ export class AdminTemplateManagerComponent implements OnInit {
     allBusinesses: Business[] = [];
     quickBusinessId: number | null = null;
 
-    constructor(private apiService: ApiService) { }
+    constructor(
+        private apiService: ApiService,
+        private router: Router
+    ) { }
 
     ngOnInit(): void {
         this.loadAllBusinesses();
@@ -119,16 +122,7 @@ export class AdminTemplateManagerComponent implements OnInit {
     }
 
     viewRawTemplate(businessId: number): void {
-        this.apiService.checkTemplateExists(businessId).subscribe({
-            next: (blob: Blob) => {
-                const url = window.URL.createObjectURL(blob);
-                window.open(url, '_blank');
-            },
-            error: (err) => {
-                console.error('Error viewing template:', err);
-                alert('Could not retrieve the template image. Please try again.');
-            }
-        });
+        this.router.navigate(['/admin/view-raw-template', businessId]);
     }
 
     onQuickFileSelected(event: any): void {

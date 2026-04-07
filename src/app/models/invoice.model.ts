@@ -55,4 +55,7 @@ export interface InvoiceResponse {
   pdfURL?: string;
   invoiceDate: string;
   createdOn: string;
+  //customer?: Customer;
+  customerName: string;
+  customerPhone: string;
 }

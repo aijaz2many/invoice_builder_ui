@@ -12,6 +12,7 @@ import { ApiService } from '../../services/api.service';
 })
 export class Header {
   currentUser: any = null;
+  isMobileMenuOpen = false;
 
   constructor(public apiService: ApiService, private router: Router) {
     this.apiService.currentUser$.subscribe(user => {
@@ -19,14 +20,20 @@ export class Header {
     });
   }
 
+  toggleMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
   get isLoggedIn(): boolean {
     return !!this.apiService.getToken();
   }
 
   get isAdmin(): boolean {
-    return this.currentUser?.roles?.some((r: any) =>
-      r.roleName && r.roleName.toLowerCase() === 'admin'
-    ) || false;
+    return this.apiService.checkIsAdmin(this.currentUser);
   }
 
 

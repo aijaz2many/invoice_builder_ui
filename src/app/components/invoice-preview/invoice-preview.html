@@ -1,0 +1,177 @@
+<div class="preview-page">
+
+    <!-- Page Header -->
+    <div class="container">
+        <div class="page-header">
+            <div class="header-left">
+                <button class="back-btn" (click)="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    {{ viewOnly ? 'Back to Invoices' : 'Back to Editor' }}
+                </button>
+                <div class="title-block">
+                    <h1>{{ viewOnly ? viewInvoiceNumber : 'Invoice Preview' }}</h1>
+                    <p>{{ viewOnly ? 'Viewing saved invoice.' : 'Review your invoice before saving it permanently.' }}</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                @if (successMessage) {
+                <div class="inline-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    {{ successMessage }}
+                </div>
+                }
+                @if (errorMessage && previewUrl) {
+                <div class="inline-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    {{ errorMessage }}
+                </div>
+                }
+
+                <!-- View-only mode: only Cancel -->
+                @if (viewOnly) {
+                <button class="btn btn-outline" (click)="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Cancel
+                </button>
+                }
+
+                <!-- Edit mode: Edit Details + Save -->
+                @if (!viewOnly) {
+                <button class="btn btn-outline" (click)="goBack()" [disabled]="isSaving">
+                    Edit Details
+                </button>
+                <button class="btn btn-primary" (click)="saveInvoice()" [disabled]="isSaving || isGenerating">
+                    <svg *ngIf="!isSaving" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span *ngIf="isSaving" class="spinner"></span>
+                    {{ isSaving ? 'Saving...' : 'Confirm & Save' }}
+                </button>
+                }
+            </div>
+        </div>
+
+        <!-- 3-column layout -->
+        <div class="preview-grid" [class.full-width-grid]="viewOnly">
+
+            <!-- Column 1: Invoice Summary (edit mode only) -->
+            <div class="summary-panel card" *ngIf="!viewOnly && formData">
+                <div class="panel-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    Invoice Summary
+                </div>
+
+                <div class="summary-list">
+                    <div class="summary-item">
+                        <span class="s-label">Invoice #</span>
+                        <span class="s-value highlight">{{ formData.invoiceNumber }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Book No</span>
+                        <span class="s-value">{{ formData.BookNo }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Date</span>
+                        <span class="s-value">{{ formData.invoiceDate }}</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-item">
+                        <span class="s-label">Customer</span>
+                        <span class="s-value">{{ formData.CustomerName }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Phone</span>
+                        <span class="s-value">{{ formData.customerPhone }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Address</span>
+                        <span class="s-value small">{{ formData.customerFullAddress }}</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="amount-block">
+                        <span class="s-label">Total Amount</span>
+                        <span class="amount">₹ {{ formData.invoiceAmount | number }}</span>
+                        <span class="amount-words">{{ formData.amountinwords }}</span>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-item">
+                        <span class="s-label">Purpose</span>
+                        <span class="s-value small">{{ formData.purpose }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Payment</span>
+                        <span class="s-value">{{ formData.paymentMode }} · {{ formData.paymentType }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Collector</span>
+                        <span class="s-value">{{ formData.billCollector }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="s-label">Nazim</span>
+                        <span class="s-value">{{ formData.Nazim }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columns 2–3: PDF Viewer -->
+            <div class="pdf-panel">
+                @if (isGenerating) {
+                <div class="loading-state card">
+                    <div class="loader-ring"></div>
+                    <p>Generating your invoice preview...</p>
+                </div>
+                }
+
+                @if (!isGenerating && errorMessage && !previewUrl) {
+                <div class="error-state card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <h3>Preview Failed</h3>
+                    <p>{{ errorMessage }}</p>
+                    <button class="btn btn-primary" (click)="generatePreview()">Try Again</button>
+                </div>
+                }
+
+                @if (!isGenerating && previewUrl) {
+                <div class="pdf-frame-wrap">
+                    <iframe [src]="previewUrl" id="invoice-pdf-frame"></iframe>
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

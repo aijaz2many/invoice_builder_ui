@@ -84,11 +84,15 @@ export class ApiService {
         return this.http.get<Customer[]>(`${this.apiUrl}/customers/`);
     }
 
-    // PDF Generation
-    generateInvoice(data: InvoicePDFData): Observable<Blob> {
-        return this.http.post(`${this.apiUrl}/pdf/generate-invoice`, data, {
+    // PDF Generation & Invoicing
+    previewInvoice(data: InvoicePDFData): Observable<Blob> {
+        return this.http.post(`${this.apiUrl}/pdf/preview-invoice`, data, {
             responseType: 'blob'
         });
+    }
+
+    saveInvoice(data: InvoicePDFData): Observable<any> {
+        return this.http.post(`${this.apiUrl}/pdf/save-invoice`, data);
     }
 
     // Authentication
@@ -161,5 +165,44 @@ export class ApiService {
 
     getAdminBusinesses(): Observable<Business[]> {
         return this.http.get<Business[]>(`${this.apiUrl}/admin/businesses`);
+    }
+    get isAdmin(): boolean {
+        return this.checkIsAdmin(this.currentUserSubject.value);
+    }
+    checkIsAdmin(user: any): boolean {
+        if (!user) return false;
+
+        // 1. Check for direct string property
+        const directRole = user.role || user.userRole || user.user_role || user.roles;
+        if (typeof directRole === 'string') {
+            const r = directRole.toLowerCase();
+            if (r === 'admin' || r === 'administrator') return true;
+        }
+
+        // 2. Check for nested roles array
+        const roles = user.roles || user.userRoles || user.user_roles;
+        if (Array.isArray(roles)) {
+            if (roles.some((r: any) => {
+                if (typeof r === 'string') {
+                    const name = r.toLowerCase();
+                    return name === 'admin' || name === 'administrator';
+                }
+                const name = (r.roleName || r.rolename || r.name || r.role || '').toLowerCase();
+                return name === 'admin' || name === 'administrator';
+            })) return true;
+        }
+
+        // 3. Check for nested role object (non-array)
+        if (typeof directRole === 'object' && directRole !== null) {
+            const name = (directRole.roleName || directRole.name || '').toLowerCase();
+            if (name === 'admin' || name === 'administrator') return true;
+        }
+
+        // 4. Check for direct boolean flags
+        if (user.isAdmin === true || user.is_admin === true || user.isSuperuser === true || user.is_superuser === true || user.superuser === true) {
+            return true;
+        }
+
+        return false;
     }
 }

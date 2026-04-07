@@ -1,35 +1,80 @@
 <div class="builder-container">
     <div class="container">
-        <div *ngIf="isTemplatePending" class="warning-banner" style="margin-bottom: 2rem;">
+
+        @if (isTemplatePending) {
+        <div class="alert-banner alert-warning">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="12" y1="8" x2="12" y2="12"></line>
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
-            <div class="warning-content">
+            <div>
                 <strong>Template Under Review</strong>
-                <p>You uploaded an image template. Our admin is currently converting it to a professional PDF. You can
-                    prepare your invoice form, but generation will be available once the template is active.</p>
+                <p>Your business image is being converted to a professional PDF template. You can fill out the form,
+                    but downloading will be enabled once the admin activates the template.</p>
             </div>
         </div>
+        }
 
-        <div class="builder-header">
-            <div class="page-header">
+        @if (isTemplateMissing) {
+        <div class="upload-card card">
+            <div class="upload-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <h3>One More Step!</h3>
+            <p>Please upload your sample invoice image. We will use this to create your professional PDF template.</p>
+
+            @if (errorMessage) { <div class="field-alert field-alert-danger">{{ errorMessage }}</div> }
+            @if (successMessage) { <div class="field-alert field-alert-success">{{ successMessage }}</div> }
+
+            <div class="upload-actions">
+                <input type="file" #imageInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
+                    hidden>
+                <button class="btn btn-primary" (click)="imageInput.click()" [disabled]="isUploading">
+                    {{ selectedFile ? 'Selected: ' + selectedFile.name : 'Select Image or Template' }}
+                </button>
+                @if (selectedFile) {
+                <button class="btn btn-success" (click)="uploadBusinessTemplate()" [disabled]="isUploading">
+                    {{ isUploading ? 'Uploading...' : 'Confirm & Upload' }}
+                </button>
+                }
+            </div>
+        </div>
+        }
+
+        @if (!isTemplateMissing) {
+        <div class="page-header">
+            <div class="header-left">
                 <h2 id="builder-title">Create New Invoice</h2>
                 <p>Fill in the details below to generate a professional PDF invoice.</p>
             </div>
+            @if (successMessage) {
+            <div class="success-banner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>{{ successMessage }}</span>
+            </div>
+            }
         </div>
 
-        <form [formGroup]="invoiceForm" (ngSubmit)="generateInvoice()" class="builder-grid">
-            <!-- Left Column: Form Details -->
-            <div class="form-section card">
+        <form [formGroup]="invoiceForm" (ngSubmit)="previewInvoice()" class="invoice-form">
+
+            <!-- ── Row 1: Invoice Information ── -->
+            <div class="form-card card">
                 <div class="section-title">
-                    <span class="step-number">1</span>
+                    <span class="step-badge">1</span>
                     <h3>Invoice Information</h3>
                 </div>
-
-                <div class="form-grid">
+                <div class="row-4">
                     <div class="form-group">
                         <label for="businessId">Business / Organization</label>
                         <select id="businessId" formControlName="businessId"
@@ -45,7 +90,7 @@
 
                     <div class="form-group">
                         <label for="invoiceNumber">Invoice Number</label>
-                        <input type="text" id="invoiceNumber" formControlName="invoiceNumber" placeholder="INV-001"
+                        <input type="text" id="invoiceNumber" formControlName="invoiceNumber" placeholder="INVC-0001"
                             [class.error]="invoiceForm.get('invoiceNumber')?.touched && invoiceForm.get('invoiceNumber')?.invalid">
                         <div class="field-error"
                             *ngIf="invoiceForm.get('invoiceNumber')?.touched && invoiceForm.get('invoiceNumber')?.hasError('required')">
@@ -73,16 +118,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="divider"></div>
-
+            <!-- ── Row 2: Customer Details ── -->
+            <div class="form-card card">
                 <div class="section-title">
-                    <span class="step-number">2</span>
+                    <span class="step-badge">2</span>
                     <h3>Customer Details</h3>
                 </div>
-
-                <div class="form-grid">
-                    <div class="form-group full-width">
+                <div class="row-4">
+                    <div class="form-group">
                         <label for="CustomerName">Customer Name</label>
                         <input type="text" id="CustomerName" formControlName="CustomerName" placeholder="Full Name"
                             [class.error]="invoiceForm.get('CustomerName')?.touched && invoiceForm.get('CustomerName')?.invalid">
@@ -113,11 +158,11 @@
                         </select>
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="customerFullAddress">Customer Address</label>
-                        <textarea id="customerFullAddress" formControlName="customerFullAddress" rows="2"
+                        <input type="text" id="customerFullAddress" formControlName="customerFullAddress"
                             placeholder="Street, City, Country"
-                            [class.error]="invoiceForm.get('customerFullAddress')?.touched && invoiceForm.get('customerFullAddress')?.invalid"></textarea>
+                            [class.error]="invoiceForm.get('customerFullAddress')?.touched && invoiceForm.get('customerFullAddress')?.invalid">
                         <div class="field-error"
                             *ngIf="invoiceForm.get('customerFullAddress')?.touched && invoiceForm.get('customerFullAddress')?.hasError('required')">
                             Address is required
@@ -126,18 +171,17 @@
                 </div>
             </div>
 
-            <!-- Right Column: Amount & Actions -->
-            <div class="action-section">
-                <div class="card summary-card">
-                    <div class="section-title">
-                        <span class="step-number">3</span>
-                        <h3>Amount & Purpose</h3>
-                    </div>
-
+            <!-- ── Row 3: Amount & Purpose ── -->
+            <div class="form-card card">
+                <div class="section-title">
+                    <span class="step-badge">3</span>
+                    <h3>Amount &amp; Purpose</h3>
+                </div>
+                <div class="row-4">
                     <div class="form-group">
                         <label for="invoiceAmount">Amount</label>
                         <div class="input-with-symbol">
-                            <span class="symbol">$</span>
+                            <span class="symbol">₹</span>
                             <input type="number" id="invoiceAmount" formControlName="invoiceAmount" placeholder="0.00"
                                 [class.error]="invoiceForm.get('invoiceAmount')?.touched && invoiceForm.get('invoiceAmount')?.invalid">
                         </div>
@@ -154,44 +198,11 @@
                     <div class="form-group">
                         <label for="amountinwords">Amount in Words</label>
                         <input type="text" id="amountinwords" formControlName="amountinwords"
-                            placeholder="Five hundred dollars only"
+                            placeholder="Auto-filled..."
                             [class.error]="invoiceForm.get('amountinwords')?.touched && invoiceForm.get('amountinwords')?.invalid">
                         <div class="field-error"
                             *ngIf="invoiceForm.get('amountinwords')?.touched && invoiceForm.get('amountinwords')?.hasError('required')">
                             Amount in words is required
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="purpose">Purpose</label>
-                        <textarea id="purpose" formControlName="purpose" rows="2"
-                            placeholder="What is this invoice for?"
-                            [class.error]="invoiceForm.get('purpose')?.touched && invoiceForm.get('purpose')?.invalid"></textarea>
-                        <div class="field-error"
-                            *ngIf="invoiceForm.get('purpose')?.touched && invoiceForm.get('purpose')?.hasError('required')">
-                            Purpose is required
-                        </div>
-                    </div>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="billCollector">Bill Collector</label>
-                            <input type="text" id="billCollector" formControlName="billCollector"
-                                placeholder="Collector Name"
-                                [class.error]="invoiceForm.get('billCollector')?.touched && invoiceForm.get('billCollector')?.invalid">
-                            <div class="field-error"
-                                *ngIf="invoiceForm.get('billCollector')?.touched && invoiceForm.get('billCollector')?.hasError('required')">
-                                Required
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="Nazim">Nazim / Authorized</label>
-                            <input type="text" id="Nazim" formControlName="Nazim" placeholder="Authorized Person"
-                                [class.error]="invoiceForm.get('Nazim')?.touched && invoiceForm.get('Nazim')?.invalid">
-                            <div class="field-error"
-                                *ngIf="invoiceForm.get('Nazim')?.touched && invoiceForm.get('Nazim')?.hasError('required')">
-                                Required
-                            </div>
                         </div>
                     </div>
 
@@ -204,41 +215,90 @@
                         </select>
                     </div>
 
-                    <div class="actions">
-                        <button type="submit" id="btn-generate" class="btn btn-primary full-width"
+                    <div class="form-group">
+                        <label for="purpose">Purpose</label>
+                        <input type="text" id="purpose" formControlName="purpose"
+                            placeholder="What is this invoice for?"
+                            [class.error]="invoiceForm.get('purpose')?.touched && invoiceForm.get('purpose')?.invalid">
+                        <div class="field-error"
+                            *ngIf="invoiceForm.get('purpose')?.touched && invoiceForm.get('purpose')?.hasError('required')">
+                            Purpose is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Row 4: Signatories ── -->
+            <div class="form-card card">
+                <div class="section-title">
+                    <span class="step-badge">4</span>
+                    <h3>Signatories</h3>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label for="billCollector">Bill Collector</label>
+                        <input type="text" id="billCollector" formControlName="billCollector"
+                            placeholder="Collector Name"
+                            [class.error]="invoiceForm.get('billCollector')?.touched && invoiceForm.get('billCollector')?.invalid">
+                        <div class="field-error"
+                            *ngIf="invoiceForm.get('billCollector')?.touched && invoiceForm.get('billCollector')?.hasError('required')">
+                            Bill Collector is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Nazim">Nazim / Authorized</label>
+                        <input type="text" id="Nazim" formControlName="Nazim" placeholder="Authorized Person"
+                            [class.error]="invoiceForm.get('Nazim')?.touched && invoiceForm.get('Nazim')?.invalid">
+                        <div class="field-error"
+                            *ngIf="invoiceForm.get('Nazim')?.touched && invoiceForm.get('Nazim')?.hasError('required')">
+                            Nazim / Authorized is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Row 5: Preview & Actions ── -->
+            <div class="form-card card action-card">
+                <div class="action-row">
+                    <div class="action-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <div>
+                            <strong>Ready to Preview?</strong>
+                            <p>Generate a PDF preview of your invoice before saving.</p>
+                        </div>
+                    </div>
+                    <div class="action-btns">
+                        <button type="button" id="btn-reset" class="btn btn-outline" (click)="resetForm()">
+                            Reset Form
+                        </button>
+                        <button type="submit" id="btn-preview" class="btn btn-primary"
                             [disabled]="isGenerating || isTemplatePending">
                             <svg *ngIf="!isGenerating" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
                             </svg>
-                            {{ isGenerating ? 'Generating PDF...' : (isTemplatePending ? 'Awaiting Template Approval' :
-                            'Download PDF Invoice') }}
-                        </button>
-                        <button type="button" id="btn-reset" class="btn btn-outline full-width" (click)="resetForm()">
-                            Reset Form
+                            <span *ngIf="isGenerating" class="spinner"></span>
+                            {{ isGenerating ? 'Generating...' : (isTemplatePending ? 'Awaiting Template Approval' :
+                            'Preview Invoice') }}
                         </button>
                     </div>
-                </div>
-
-                <div class="tip-card card" *ngIf="previewUrl">
-                    <div class="d-flex align-items-center" style="gap: 12px; color: var(--success-color);">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                        <strong>Invoice Generated!</strong>
-                    </div>
-                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-top: 8px;">
-                        Your invoice has been downloaded. You can also preview it here.
-                    </p>
-                    <a [href]="previewUrl" target="_blank" class="btn btn-link"
-                        style="padding-left: 0; margin-top: 8px;">Open in New Tab</a>
                 </div>
             </div>
+
         </form>
+
+
+        }
+        <!-- Page Header -->
+
     </div>
+
+
+
 </div>

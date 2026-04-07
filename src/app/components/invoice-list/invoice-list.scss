@@ -5,7 +5,17 @@
 
 .table-card {
     padding: 0;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Limit max height while allowing shrinkage for fewer rows */
+    max-height: calc(100vh - 200px);
+}
+
+.table-responsive {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .invoice-table {
@@ -15,16 +25,37 @@
 
     th {
         background: var(--bg-color);
-        padding: 1rem 1.5rem;
+        padding: 0.6rem 1rem;
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
         color: var(--text-muted);
         border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+
+        &.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+            white-space: nowrap;
+
+            &:hover {
+                color: var(--text-main);
+            }
+
+            .sort-icon {
+                display: inline-block;
+                margin-left: 0.25rem;
+                font-weight: bold;
+                color: var(--primary-color);
+            }
+        }
     }
 
     td {
-        padding: 1rem 1.5rem;
+        padding: 0.6rem 1rem;
         border-bottom: 1px solid var(--border-color);
         font-size: 0.875rem;
     }
@@ -105,7 +136,8 @@
         background: var(--bg-color);
     }
 
-    &.btn-download:hover:not(:disabled) {
+    &.btn-download:hover:not(:disabled),
+    &.btn-view:hover:not(:disabled) {
         color: var(--primary-color);
         background: #eff6ff;
     }
@@ -115,9 +147,68 @@
         background: #fef2f2;
     }
 
+    &.active {
+        background: var(--primary-color);
+        color: #fff;
+        border-color: var(--primary-color);
+    }
+
     &:disabled {
         opacity: 0.3;
         cursor: not-allowed;
+    }
+}
+
+.preview-modal {
+    max-width: 1000px;
+    width: 95vw;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+
+    .modal-header {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        text-align: left;
+        align-items: center;
+
+        h3 {
+            margin: 0;
+            font-size: 1.125rem;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+
+            &:hover {
+                background: var(--bg-color);
+                color: var(--text-main);
+            }
+        }
+    }
+
+    .modal-body {
+        flex: 1;
+        padding: 0;
+        overflow: hidden;
+        background: #525659; // Typical PDF viewer background
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     }
 }
 
@@ -125,6 +216,23 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    flex-wrap: wrap;
+
+    .search-box {
+        input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 250px;
+
+            &:focus {
+                border-color: var(--primary-color);
+            }
+        }
+    }
 }
 
 .filter-group {
@@ -307,5 +415,56 @@
     &:hover {
         background: #f9fafb;
         border-color: #d1d5db;
+    }
+}
+
+.select-sm {
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    min-width: auto;
+}
+
+.pagination-container {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: #fff;
+
+    /* Explicit flex properties to override any missing global classes */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.pagination-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .page-numbers {
+        display: flex;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .pagination-container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
     }
 }

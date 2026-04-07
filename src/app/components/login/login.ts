@@ -47,9 +47,8 @@ export class LoginComponent {
               this.router.navigate(['/builder']);
               return;
             }
-            const isAdmin = user.roles && user.roles.some((r: any) =>
-              r.roleName && r.roleName.toLowerCase() === 'admin'
-            );
+            const isAdmin = this.apiService.checkIsAdmin(user);
+            const userId = user.userId || user.user_id || user.id;
 
             if (isAdmin) {
               this.router.navigate(['/admin/dashboard']);
@@ -57,7 +56,7 @@ export class LoginComponent {
             }
 
             // Check if standard user has businesses
-            this.apiService.getUserBusinesses(user.userId).subscribe({
+            this.apiService.getUserBusinesses(userId).subscribe({
               next: (businesses) => {
                 if (businesses.length === 0) {
                   this.router.navigate(['/create-business']);
@@ -65,13 +64,7 @@ export class LoginComponent {
                   // Check if the first business has a template
                   this.apiService.checkTemplateExists(businesses[0].businessId).subscribe({
                     next: () => this.router.navigate(['/builder']),
-                    error: (err) => {
-                      if (err.status === 404) {
-                        this.router.navigate(['/upload-template', businesses[0].businessId]);
-                      } else {
-                        this.router.navigate(['/builder']);
-                      }
-                    }
+                    error: () => this.router.navigate(['/builder'])
                   });
                 }
               },

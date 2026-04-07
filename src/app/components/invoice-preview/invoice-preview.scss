@@ -1,0 +1,334 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes ringPulse {
+    to { transform: rotate(360deg); }
+}
+
+// ─── Page Shell ───────────────────────────────────────────────────────────────
+
+.preview-page {
+    padding: 2.5rem 0 4rem;
+    min-height: calc(100vh - 72px);
+    animation: fadeIn 0.5s ease-out;
+}
+
+// ─── Page Header ─────────────────────────────────────────────────────────────
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    animation: slideUp 0.5s ease-out;
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .title-block {
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0 0 0.2rem;
+            letter-spacing: -0.02em;
+        }
+        p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+}
+
+// ─── Back Button ─────────────────────────────────────────────────────────────
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+        color: var(--text-main);
+        background: var(--bg-color);
+        border-color: var(--text-muted);
+    }
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 0.5rem 1.2rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    &:hover:not(:disabled) { background: var(--bg-color); border-color: var(--text-muted); }
+    &:disabled { opacity: 0.55; cursor: not-allowed; }
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.55rem 1.3rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) { background: var(--primary-hover, #4f46e5); transform: translateY(-1px); }
+    &:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+}
+
+.spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+// ─── Inline Alerts ────────────────────────────────────────────────────────────
+
+.inline-success,
+.inline-error {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.inline-success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    svg { color: #22c55e; }
+}
+
+.inline-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    svg { color: #ef4444; }
+}
+
+// ─── 3-Column Preview Grid ────────────────────────────────────────────────────
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;  // col 1 = summary, cols 2-3 = PDF
+    gap: 1.5rem;
+    align-items: start;
+    animation: slideUp 0.55s ease-out 0.05s both;
+
+    &.full-width-grid {
+        grid-template-columns: 1fr;  // full width in view-only mode
+    }
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ─── Summary Panel (Column 1) ─────────────────────────────────────────────────
+
+.summary-panel {
+    padding: 1.5rem;
+    position: sticky;
+    top: 96px;
+    animation: slideUp 0.6s ease-out 0.1s both;
+    transition: box-shadow 0.25s;
+    &:hover { box-shadow: var(--shadow-lg); }
+
+    .panel-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 1.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        svg { color: var(--primary-color); }
+    }
+}
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    .s-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+    }
+
+    .s-value {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--text-main);
+        &.small { font-size: 0.8rem; }
+        &.highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+    }
+}
+
+.amount-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
+    border: 1px solid #e0e7ff;
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+
+    .s-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+    }
+
+    .amount {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        letter-spacing: -0.02em;
+    }
+
+    .amount-words {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+}
+
+.divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.4rem 0;
+}
+
+// ─── PDF Panel (Columns 2–3) ──────────────────────────────────────────────────
+
+.pdf-panel {
+    animation: slideUp 0.6s ease-out 0.15s both;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdf-frame-wrap {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    flex: 1;
+
+    iframe {
+        display: block;
+        width: 100%;
+        height: calc(100vh - 72px - 64px - 4rem);
+        min-height: 580px;
+        border: none;
+        animation: fadeIn 0.5s ease-out;
+    }
+}
+
+// ─── Loading State ────────────────────────────────────────────────────────────
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    min-height: 400px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+
+    .loader-ring {
+        width: 48px; height: 48px;
+        border-radius: 50%;
+        border: 3px solid var(--border-color);
+        border-top-color: var(--primary-color);
+        animation: ringPulse 0.9s linear infinite;
+    }
+
+    p { margin: 0; }
+}
+
+// ─── Error State ──────────────────────────────────────────────────────────────
+
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    min-height: 400px;
+    text-align: center;
+    padding: 2.5rem;
+
+    svg { color: var(--danger-color); opacity: 0.7; }
+    h3 { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--text-main); }
+    p  { font-size: 0.875rem; margin: 0; color: var(--text-muted); max-width: 360px; }
+}

@@ -17,14 +17,19 @@ export class TemplateUploadComponent implements OnInit {
     isUploading = false;
     errorMessage: string | null = null;
     successMessage: string | null = null;
+    isAdmin = false;
 
     constructor(
         private route: ActivatedRoute,
-        private apiService: ApiService,
+        public apiService: ApiService,
         private router: Router
     ) { }
 
     ngOnInit(): void {
+        this.apiService.currentUser$.subscribe(user => {
+            this.isAdmin = this.apiService.checkIsAdmin(user);
+        });
+
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
             this.businessId = Number(id);
@@ -38,8 +43,18 @@ export class TemplateUploadComponent implements OnInit {
         this.apiService.getBusiness(id).subscribe({
             next: (business) => {
                 this.businessName = business.businessName;
+
+                // Security Guard: Regular users should only see this page if the template is MISSING.
+                // Once it's PENDING or ACTIVE, they've done their part (or the admin has),
+                // so we redirect them back to the builder to draft invoices.
+                if (!this.isAdmin && business.templateStatus !== 'MISSING') {
+                    this.router.navigate(['/builder']);
+                }
             },
-            error: (err) => console.error('Error loading business:', err)
+            error: (err) => {
+                console.error('Error loading business:', err);
+                this.router.navigate(['/builder']);
+            }
         });
     }
 

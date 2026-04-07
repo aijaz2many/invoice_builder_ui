@@ -1,6 +1,6 @@
 <header class="header shadow-sm">
-  <div class="container d-flex align-items-center justify-content-between">
-    <div class="logo-area d-flex align-items-center">
+  <div class="header-container container">
+    <div class="logo-area" routerLink="/" style="cursor: pointer;">
       <div class="logo-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -14,29 +14,48 @@
       </div>
       <h1 class="brand-name" routerLink="/" style="cursor: pointer;">eInvoice<span>Builder</span></h1>
     </div>
-    <nav class="nav-links">
-      <ng-container *ngIf="isLoggedIn">
-        <a *ngIf="isAdmin" routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
-        <a *ngIf="isAdmin" routerLink="/admin/subscriptions" routerLinkActive="active"
-          class="nav-link">Subscriptions</a>
-        <a routerLink="/builder" routerLinkActive="active" class="nav-link">Builder</a>
-        <a *ngIf="isAdmin" routerLink="/admin/templates" routerLinkActive="active" class="nav-link">Templates</a>
-        <a routerLink="/invoices" routerLinkActive="active" class="nav-link">Invoices</a>
-        <a (click)="logout()" class="nav-link" style="cursor: pointer;">Logout</a>
-      </ng-container>
-      <ng-container *ngIf="!isLoggedIn">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
-        <a routerLink="/pricing" routerLinkActive="active" class="nav-link">Pricing</a>
-        <a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a>
-        <a routerLink="/signup" routerLinkActive="active" class="nav-link">Sign Up</a>
-      </ng-container>
+    <button class="mobile-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+      <svg *ngIf="!isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg *ngIf="isMobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <nav class="nav-links" [class.open]="isMobileMenuOpen">
+      @if (isLoggedIn) {
+      @if (isAdmin) {
+      <a routerLink="/admin/dashboard" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Dashboard</a>
+      <a routerLink="/admin/subscriptions" routerLinkActive="active" (click)="closeMenu()"
+        class="nav-link">Subscriptions</a>
+      }
+      <a routerLink="/builder" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Builder</a>
+      @if (isAdmin) {
+      <a routerLink="/admin/templates" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Templates</a>
+      }
+      <a routerLink="/invoices" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Invoices</a>
+      <a (click)="logout(); closeMenu()" class="nav-link" style="cursor: pointer;">Logout</a>
+      } @else {
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()"
+        class="nav-link">Home</a>
+      <a routerLink="/pricing" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Pricing</a>
+      <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Login</a>
+      <a routerLink="/signup" routerLinkActive="active" (click)="closeMenu()" class="nav-link">Sign Up</a>
+      }
     </nav>
-    <div class="user-profile" *ngIf="isLoggedIn && currentUser">
-      <div class="user-info d-none d-md-flex">
+    @if (isLoggedIn && currentUser) {
+    <div class="user-profile">
+      <div class="user-info">
         <span class="user-name">{{ currentUser.fullName }}</span>
         <span class="user-role">{{ isAdmin ? 'Administrator' : 'User' }}</span>
       </div>
       <div class="avatar">{{ initials }}</div>
     </div>
+    }
   </div>
 </header>

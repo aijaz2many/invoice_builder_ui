@@ -12,6 +12,8 @@ import { AdminSubscriptionsComponent } from './components/admin-subscriptions/ad
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { PricingComponent } from './components/pricing/pricing';
 import { HomeComponent } from './components/home/home';
+import { InvoicePreviewComponent } from './components/invoice-preview/invoice-preview';
+import { TemplateRawImageViewComponent } from './components/template-raw-image-view/template-raw-image-view';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -19,6 +21,7 @@ export const routes: Routes = [
     { path: 'pricing', component: PricingComponent },
     { path: 'builder', component: InvoiceBuilderComponent },
     { path: 'invoices', component: InvoiceListComponent },
+    { path: 'invoice-preview', component: InvoicePreviewComponent },
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
@@ -26,6 +29,7 @@ export const routes: Routes = [
     { path: 'create-business', component: CreateBusinessComponent },
     { path: 'upload-template/:id', component: TemplateUploadComponent },
     { path: 'admin/templates', component: AdminTemplateManagerComponent },
+    { path: 'admin/view-raw-template/:id', component: TemplateRawImageViewComponent },
     { path: 'admin/subscriptions', component: AdminSubscriptionsComponent },
     { path: 'admin/dashboard', component: DashboardComponent },
     { path: '**', redirectTo: 'login' }

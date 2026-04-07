@@ -19,7 +19,8 @@
 
         <div class="card auth-card">
             <form [formGroup]="businessForm" (ngSubmit)="onSubmit()">
-                <div *ngIf="errorMessage" class="error-banner">
+                @if (errorMessage) {
+                <div class="error-banner">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -28,16 +29,19 @@
                     </svg>
                     {{ errorMessage }}
                 </div>
+                }
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="businessName">Business Name</label>
                         <input type="text" id="businessName" formControlName="businessName" placeholder="Acme Corp"
                             [class.error]="businessForm.get('businessName')?.touched && businessForm.get('businessName')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessName')?.touched && businessForm.get('businessName')?.hasError('required')">
+                        @if (businessForm.get('businessName')?.touched &&
+                        businessForm.get('businessName')?.hasError('required')) {
+                        <div class="field-error">
                             Business name is required
                         </div>
+                        }
                     </div>
 
                     <div class="form-group">
@@ -45,29 +49,37 @@
                         <select id="businessTypeId" formControlName="businessTypeId" (change)="onTypeChange()"
                             [class.error]="businessForm.get('businessTypeId')?.touched && businessForm.get('businessTypeId')?.invalid">
                             <option value="">Select Category</option>
-                            <option *ngFor="let type of businessTypes" [value]="type.businessTypeId">
+                            @for (type of businessTypes; track type.businessTypeId) {
+                            <option [value]="type.businessTypeId">
                                 {{ type.businessTypeName }}
                             </option>
+                            }
                             <option value="other">+ Add New Category</option>
                         </select>
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessTypeId')?.touched && businessForm.get('businessTypeId')?.hasError('required')">
+                        @if (businessForm.get('businessTypeId')?.touched &&
+                        businessForm.get('businessTypeId')?.hasError('required')) {
+                        <div class="field-error">
                             Please select a business category
                         </div>
+                        }
                     </div>
                 </div>
 
                 <!-- Dynamic New Type Input -->
-                <div class="form-group" *ngIf="showOtherType" style="margin-top: -1rem; margin-bottom: 2rem;">
+                @if (showOtherType) {
+                <div class="form-group" style="margin-top: -1rem; margin-bottom: 2rem;">
                     <label for="newBusinessTypeName">New Category Name</label>
                     <input type="text" id="newBusinessTypeName" formControlName="newBusinessTypeName"
                         placeholder="e.g. Retail, Consulting"
                         [class.error]="businessForm.get('newBusinessTypeName')?.touched && businessForm.get('newBusinessTypeName')?.invalid">
-                    <div class="field-error"
-                        *ngIf="businessForm.get('newBusinessTypeName')?.touched && businessForm.get('newBusinessTypeName')?.hasError('required')">
+                    @if (businessForm.get('newBusinessTypeName')?.touched &&
+                    businessForm.get('newBusinessTypeName')?.hasError('required')) {
+                    <div class="field-error">
                         Please specify the new category name
                     </div>
+                    }
                 </div>
+                }
 
                 <div class="form-grid">
                     <div class="form-group">
@@ -75,14 +87,18 @@
                         <input type="email" id="businessEmail" formControlName="businessEmail"
                             placeholder="contact@acme.com"
                             [class.error]="businessForm.get('businessEmail')?.touched && businessForm.get('businessEmail')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessEmail')?.touched && businessForm.get('businessEmail')?.hasError('required')">
+                        @if (businessForm.get('businessEmail')?.touched &&
+                        businessForm.get('businessEmail')?.hasError('required')) {
+                        <div class="field-error">
                             Email address is required
                         </div>
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessEmail')?.touched && businessForm.get('businessEmail')?.hasError('email')">
+                        }
+                        @if (businessForm.get('businessEmail')?.touched &&
+                        businessForm.get('businessEmail')?.hasError('email')) {
+                        <div class="field-error">
                             Please enter a valid email address
                         </div>
+                        }
                     </div>
 
                     <div class="form-group">
@@ -90,10 +106,12 @@
                         <input type="text" id="businessPhone" formControlName="businessPhone"
                             placeholder="+1 234 567 890"
                             [class.error]="businessForm.get('businessPhone')?.touched && businessForm.get('businessPhone')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessPhone')?.touched && businessForm.get('businessPhone')?.hasError('required')">
+                        @if (businessForm.get('businessPhone')?.touched &&
+                        businessForm.get('businessPhone')?.hasError('required')) {
+                        <div class="field-error">
                             Phone number is required
                         </div>
+                        }
                     </div>
                 </div>
 
@@ -102,10 +120,12 @@
                     <input type="text" id="businessAddress" formControlName="businessAddress"
                         placeholder="123 Business St"
                         [class.error]="businessForm.get('businessAddress')?.touched && businessForm.get('businessAddress')?.invalid">
-                    <div class="field-error"
-                        *ngIf="businessForm.get('businessAddress')?.touched && businessForm.get('businessAddress')?.hasError('required')">
+                    @if (businessForm.get('businessAddress')?.touched &&
+                    businessForm.get('businessAddress')?.hasError('required')) {
+                    <div class="field-error">
                         Full address is required
                     </div>
+                    }
                 </div>
 
                 <div class="form-grid-3">
@@ -113,28 +133,34 @@
                         <label for="businessCity">City</label>
                         <input type="text" id="businessCity" formControlName="businessCity" placeholder="New York"
                             [class.error]="businessForm.get('businessCity')?.touched && businessForm.get('businessCity')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessCity')?.touched && businessForm.get('businessCity')?.hasError('required')">
+                        @if (businessForm.get('businessCity')?.touched &&
+                        businessForm.get('businessCity')?.hasError('required')) {
+                        <div class="field-error">
                             City is required
                         </div>
+                        }
                     </div>
                     <div class="form-group">
                         <label for="businessState">State</label>
                         <input type="text" id="businessState" formControlName="businessState" placeholder="NY"
                             [class.error]="businessForm.get('businessState')?.touched && businessForm.get('businessState')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessState')?.touched && businessForm.get('businessState')?.hasError('required')">
+                        @if (businessForm.get('businessState')?.touched &&
+                        businessForm.get('businessState')?.hasError('required')) {
+                        <div class="field-error">
                             State is required
                         </div>
+                        }
                     </div>
                     <div class="form-group">
                         <label for="businessZip">Zip Code</label>
                         <input type="text" id="businessZip" formControlName="businessZip" placeholder="10001"
                             [class.error]="businessForm.get('businessZip')?.touched && businessForm.get('businessZip')?.invalid">
-                        <div class="field-error"
-                            *ngIf="businessForm.get('businessZip')?.touched && businessForm.get('businessZip')?.hasError('required')">
+                        @if (businessForm.get('businessZip')?.touched &&
+                        businessForm.get('businessZip')?.hasError('required')) {
+                        <div class="field-error">
                             Zip required
                         </div>
+                        }
                     </div>
                 </div>
 

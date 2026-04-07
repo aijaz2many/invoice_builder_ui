@@ -16,7 +16,8 @@ import { Footer } from './components/footer/footer';
   `,
   styles: [`
     .main-content {
-      min-height: calc(100vh - 72px - 80px); /* Adjust for header and footer */
+      padding-top: 72px; /* Fixed header offset */
+      min-height: calc(100vh - 80px); /* Adjust for footer */
       display: flex;
       flex-direction: column;
     }
