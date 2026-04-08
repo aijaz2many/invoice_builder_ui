@@ -147,7 +147,7 @@
                 @if (isGenerating) {
                 <div class="loading-state card">
                     <div class="loader-ring"></div>
-                    <p>Generating your invoice preview...</p>
+                    <p>{{ viewOnly ? 'Loading your invoice...' : 'Generating your invoice preview...' }}</p>
                 </div>
                 }
 

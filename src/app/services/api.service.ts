@@ -159,6 +159,10 @@ export class ApiService {
         return this.http.delete(`${this.apiUrl}/invoices/${invoiceId}`);
     }
 
+    getPdfBlob(url: string): Observable<Blob> {
+        return this.http.get(url, { responseType: 'blob' });
+    }
+
     getAdminStats(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/admin/stats`);
     }

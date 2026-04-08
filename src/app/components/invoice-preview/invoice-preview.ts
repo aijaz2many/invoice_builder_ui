@@ -43,7 +43,7 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
     if (historyState?.pdfUrl) {
       this.viewOnly = true;
       this.viewInvoiceNumber = historyState.invoiceNumber || 'Invoice';
-      this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(historyState.pdfUrl);
+      this.loadExistingPdf(historyState.pdfUrl);
       return;
     }
 
@@ -81,6 +81,28 @@ export class InvoicePreviewComponent implements OnInit, OnDestroy {
         this.isGenerating = false;
         this.errorMessage = 'Failed to generate invoice preview. Please go back and try again.';
         console.error('Preview error:', err);
+      }
+    });
+  }
+
+  loadExistingPdf(url: string): void {
+    this.isGenerating = true;
+    this.errorMessage = null;
+
+    this.apiService.getPdfBlob(url).subscribe({
+      next: (blob: Blob) => {
+        this.isGenerating = false;
+        if (this.rawPreviewUrl) window.URL.revokeObjectURL(this.rawPreviewUrl);
+        
+        // Ensure the Blob has the correct PDF MIME type for proper browser display
+        const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+        this.rawPreviewUrl = window.URL.createObjectURL(pdfBlob);
+        this.previewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.rawPreviewUrl);
+      },
+      error: (err: any) => {
+        this.isGenerating = false;
+        this.errorMessage = 'Failed to load the invoice PDF. The file might have been moved or the link expired.';
+        console.error('PDF load error:', err);
       }
     });
   }
