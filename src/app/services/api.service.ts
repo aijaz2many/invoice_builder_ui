@@ -8,7 +8,8 @@ import { Business, Customer, InvoicePDFData, InvoiceResponse } from '../models/i
 })
 export class ApiService {
     //private apiUrl = 'http://localhost:8000'; // Adjust based on your FastAPI server address
-    private apiUrl = 'https://invoice-builder-xfuk.onrender.com';
+    //private apiUrl = 'https://invoice-builder-xfuk.onrender.com';
+    private apiUrl = 'https://einvoicebuilder.onrender.com';
 
     private currentUserSubject = new BehaviorSubject<any>(null);
     public currentUser$ = this.currentUserSubject.asObservable();
