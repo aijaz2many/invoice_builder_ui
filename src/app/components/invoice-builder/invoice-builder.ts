@@ -24,6 +24,13 @@ export class InvoiceBuilderComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
+  scrollToUpload(): void {
+    const el = document.getElementById('upload-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -131,11 +138,14 @@ export class InvoiceBuilderComponent implements OnInit {
         this.apiService.checkTemplateExists(Number(businessId)).subscribe({
           next: () => {
             this.isTemplateMissing = false;
-            // Additional check for PENDING would be good here but checkTemplateExists usually just checks if file exists
+            this.isTemplatePending = false; // If it exists, it's not missing or pending
           },
           error: (err: any) => {
-            if (err.status === 404 && !this.isAdmin) {
-              this.isTemplateMissing = true;
+            if (err.status === 404) {
+              // Check if it's pending based on business data we already have
+              const business = this.businesses.find(b => String(b.businessId) === String(businessId));
+              this.isTemplateMissing = business?.templateStatus === 'MISSING';
+              this.isTemplatePending = business?.templateStatus === 'PENDING';
             }
           }
         });

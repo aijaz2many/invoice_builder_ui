@@ -10,45 +10,28 @@
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
             </svg>
             <div>
-                <strong>Template Under Review</strong>
-                <p>Your business image is being converted to a professional PDF template. You can fill out the form,
-                    but downloading will be enabled once the admin activates the template.</p>
+                <strong>Custom Template Pending</strong>
+                <p>Your custom image is being processed. In the meantime, you can still generate invoices using our professional default template.</p>
             </div>
         </div>
         }
 
         @if (isTemplateMissing) {
-        <div class="upload-card card">
-            <div class="upload-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-            </div>
-            <h3>One More Step!</h3>
-            <p>Please upload your sample invoice image. We will use this to create your professional PDF template.</p>
-
-            @if (errorMessage) { <div class="field-alert field-alert-danger">{{ errorMessage }}</div> }
-            @if (successMessage) { <div class="field-alert field-alert-success">{{ successMessage }}</div> }
-
-            <div class="upload-actions">
-                <input type="file" #imageInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
-                    hidden>
-                <button class="btn btn-primary" (click)="imageInput.click()" [disabled]="isUploading">
-                    {{ selectedFile ? 'Selected: ' + selectedFile.name : 'Select Image or Template' }}
-                </button>
-                @if (selectedFile) {
-                <button class="btn btn-success" (click)="uploadBusinessTemplate()" [disabled]="isUploading">
-                    {{ isUploading ? 'Uploading...' : 'Confirm & Upload' }}
-                </button>
-                }
+        <div class="alert-banner alert-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="12" x2="12" y2="16"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <div>
+                <strong>Professional Default Enabled</strong>
+                <p>No custom template found. We'll use our sleek default receipt layout. 
+                   <a href="javascript:void(0)" (click)="scrollToUpload()" style="color: inherit; text-decoration: underline; font-weight: 600;">Upload a custom image</a> to personalize your invoices.</p>
             </div>
         </div>
         }
 
-        @if (!isTemplateMissing) {
         <div class="page-header">
             <div class="header-left">
                 <h2 id="builder-title">Create New Invoice</h2>
@@ -276,7 +259,7 @@
                             Reset Form
                         </button>
                         <button type="submit" id="btn-preview" class="btn btn-primary"
-                            [disabled]="isGenerating || isTemplatePending">
+                            [disabled]="isGenerating">
                             <svg *ngIf="!isGenerating" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
@@ -284,18 +267,46 @@
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                             <span *ngIf="isGenerating" class="spinner"></span>
-                            {{ isGenerating ? 'Generating...' : (isTemplatePending ? 'Awaiting Template Approval' :
-                            'Preview Invoice') }}
+                            {{ isGenerating ? 'Generating...' : 'Preview Invoice' }}
                         </button>
                     </div>
                 </div>
             </div>
 
+            <!-- ── Optional: Template Upload ── -->
+            @if (isTemplateMissing) {
+            <div id="upload-section" class="upload-card card" style="margin-top: 2rem; border: 2px dashed #e2e8f0; background: #f8fafc;">
+                <div class="upload-icon" style="width: 50px; height: 50px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <h3>Personalize Your Invoices</h3>
+                <p>Upload your business receipt image to replace the default template with your custom branding.</p>
+
+                @if (errorMessage) { <div class="field-alert field-alert-danger">{{ errorMessage }}</div> }
+                @if (successMessage) { <div class="field-alert field-alert-success">{{ successMessage }}</div> }
+
+                <div class="upload-actions">
+                    <input type="file" #imageInput (change)="onFileSelected($event)" accept="image/*,application/pdf"
+                        hidden>
+                    <button type="button" class="btn btn-outline" (click)="imageInput.click()" [disabled]="isUploading">
+                        {{ selectedFile ? 'Selected: ' + selectedFile.name : 'Choose Image' }}
+                    </button>
+                    @if (selectedFile) {
+                    <button type="button" class="btn btn-success" (click)="uploadBusinessTemplate()" [disabled]="isUploading">
+                        {{ isUploading ? 'Uploading...' : 'Confirm & Upload' }}
+                    </button>
+                    }
+                </div>
+            </div>
+            }
+
         </form>
 
-
-        }
-        <!-- Page Header -->
 
     </div>
 
